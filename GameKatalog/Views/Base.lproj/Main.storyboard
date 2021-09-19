@@ -95,6 +95,9 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="TGj-il-1ew">
+                                <rect key="frame" x="176.66666666666666" y="403.66666666666669" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -102,6 +105,8 @@
                             <constraint firstItem="R76-PE-fNh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="2i3-AT-2UO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="R76-PE-fNh" secondAttribute="bottom" id="4AY-GN-FA6"/>
                             <constraint firstItem="R76-PE-fNh" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="JzX-JE-XkP"/>
+                            <constraint firstItem="TGj-il-1ew" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Rly-IA-NpR"/>
+                            <constraint firstItem="TGj-il-1ew" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ta1-oF-ehY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="R76-PE-fNh" secondAttribute="trailing" id="hy3-Ht-vYt"/>
                         </constraints>
                     </view>
@@ -115,6 +120,7 @@
                     <connections>
                         <outlet property="gameTableView" destination="R76-PE-fNh" id="dTj-gh-epS"/>
                         <outlet property="searchBar" destination="SYC-3G-1KS" id="zG2-h5-Y3t"/>
+                        <outlet property="spinner" destination="TGj-il-1ew" id="XYQ-Z8-8TM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

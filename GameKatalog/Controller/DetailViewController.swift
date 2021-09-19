@@ -9,11 +9,15 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    @IBOutlet weak var descriptionGame: UITextView!
     @IBOutlet weak var titleGame: UILabel!
     @IBOutlet weak var dateGame: UILabel!
     @IBOutlet weak var imageGame: UIImageView!
     @IBOutlet weak var uiViewAbout: UIView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var labelPlatform: UILabel!
     
+    @IBOutlet weak var viewDetail: UIView!
     @IBOutlet weak var genreLabel: UILabel!
     var gameData : Game?
     private var viewModel = GameDetailViewModel()
@@ -21,27 +25,54 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if viewModel.isLoading {
+//            viewDetail.isHidden = true
+            spinner.stopAnimating()
+            spinner.hidesWhenStopped = true
+        }else {
+//            viewDetail.isHidden = false
+            spinner.startAnimating()
+            spinner.hidesWhenStopped = false
+        }
         
-        viewModel.fetchDetailGameData(id: gameData!.id){ [weak self] in
+        viewModel.fetchDetailGameData(id: gameData!.id) { data in
+//            self.viewDetail.isHidden = true
+            self.spinner.stopAnimating()
+            self.spinner.hidesWhenStopped = true
+            
+            self.titleGame.text = data.name_original
+            self.dateGame.text = "\(data.rating ?? 0.0)"
+            let selectedTeamMemberID = self.gameData?.genres.map{$0.name}
+            let output = selectedTeamMemberID!.joined(separator: ", ")
+            
+            self.genreLabel.text = "\(output)"
+            
+            let url = URL(string: (data.background_image)!)
+
+            DispatchQueue.global().async {
+                let data = try? Data(contentsOf: url!)
+                DispatchQueue.main.async {
+                    self.imageGame.image = UIImage(data: data ?? Data())
+                    
+                }
+            }
+            
+            let platform = data.parent_platforms.map{$0.platform?.name}
+            var array2a = [String]()
+            for item in platform {
+                array2a.append(item!)
+            }
+            let platformOutput = array2a.joined(separator: ", ")
+            
+            
+            self.labelPlatform.text = platformOutput
+            self.descriptionGame.text = data.description
+            
+            
             
         }
         
-        titleGame.text = gameData?.name
-        dateGame.text = "\(gameData?.released ?? "")"
-        let selectedTeamMemberID = gameData?.genres.map{$0.name}
-        let output = selectedTeamMemberID!.joined(separator: ", ")
-        
-        self.genreLabel.text = "\(output)"
-        
-        let url = URL(string: (gameData?.background_image)!)
-        
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-            DispatchQueue.main.async {
-                self.imageGame.image = UIImage(data: data!)
-            }
-        }
+
         
         
         uiViewAbout.layer.cornerRadius = 5

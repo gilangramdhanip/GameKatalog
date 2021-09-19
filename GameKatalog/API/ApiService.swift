@@ -56,7 +56,7 @@ class ApiService {
         
     }
     
-    func getDetailData(id: Int, completion : @escaping (Result<GameData, Error>) -> Void){
+    func getDetailData(id: Int, completion : @escaping (Result<GameDetailData, Error>) -> Void){
         
         let dataGameUrl = "https://api.rawg.io/api/games/\(id)?key=1104fbec0dbd4792b46f31695e71aa02"
         
@@ -87,7 +87,7 @@ class ApiService {
             
             do {
                 let decode = JSONDecoder()
-                let jsonData = try decode.decode(GameData.self, from: data)
+                let jsonData = try decode.decode(GameDetailData.self, from: data)
                 print(jsonData)
                 
                 DispatchQueue.main.async {

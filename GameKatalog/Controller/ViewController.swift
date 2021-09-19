@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var apiService = ApiService()
     private var viewModel = GameViewModel()
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var gameTableView: UITableView!
     var filteredData : [String]!
@@ -23,11 +24,22 @@ class ViewController: UIViewController {
         gameTableView.delegate = self
         gameTableView.dataSource = self
         
+        gameTableView.separatorStyle = .none
+        
+        if viewModel.isLoading {
+            spinner.stopAnimating()
+            spinner.hidesWhenStopped = true
+        }else {
+            spinner.startAnimating()
+            spinner.hidesWhenStopped = false
+        }
+        
         viewModel.fetchGameData { [weak self] in
             DispatchQueue.main.async {
+                self?.spinner.stopAnimating()
+                self?.spinner.hidesWhenStopped = true
                 self?.gameTableView.reloadData()
             }
-
         }
     }
 

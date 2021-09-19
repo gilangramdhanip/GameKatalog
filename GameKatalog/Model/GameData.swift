@@ -39,16 +39,3 @@ struct Genre : Decodable {
     
     
 }
-
-struct GameDetail : Decodable {
-    let id : Int
-    let name_original : String?
-    let description : String?
-    let rating : Double?
-    let background_image : String?
-    let genres : [Genre]
-    
-    private enum CodingKeys: String, CodingKey {
-        case id, name_original, description, rating, background_image, genres
-    }
-}

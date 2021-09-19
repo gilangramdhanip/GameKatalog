@@ -11,6 +11,7 @@ class GameViewModel {
     
     private var apiService = ApiService()
     private var game = [Game]()
+    var isLoading : Bool = false
     private var filtered : [String]!
     
     func fetchGameData(completion : @escaping () -> ()) {
@@ -19,10 +20,12 @@ class GameViewModel {
             
             switch result {
             case .success(let listOf):
+                self?.isLoading = false
                 self?.game = listOf.game
                 completion()
             
             case.failure(let error):
+                self?.isLoading = true
                 print("Error processing json data: \(error)")
             }
             
