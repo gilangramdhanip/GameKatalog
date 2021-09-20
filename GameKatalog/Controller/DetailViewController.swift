@@ -17,6 +17,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var labelPlatform: UILabel!
     
+    @IBOutlet weak var viewBox: UIView!
     @IBOutlet weak var viewDetail: UIView!
     @IBOutlet weak var genreLabel: UILabel!
     var gameData : Game?
@@ -26,17 +27,14 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
 
         if viewModel.isLoading {
-//            viewDetail.isHidden = true
             spinner.stopAnimating()
             spinner.hidesWhenStopped = true
         }else {
-//            viewDetail.isHidden = false
             spinner.startAnimating()
             spinner.hidesWhenStopped = false
         }
         
         viewModel.fetchDetailGameData(id: gameData!.id) { data in
-//            self.viewDetail.isHidden = true
             self.spinner.stopAnimating()
             self.spinner.hidesWhenStopped = true
             
@@ -73,9 +71,8 @@ class DetailViewController: UIViewController {
         }
         
 
-        
-        
-        uiViewAbout.layer.cornerRadius = 5
+        viewBox.backgroundColor = UIColor.red
+        viewBox.layer.cornerRadius = 5
         
     }
     

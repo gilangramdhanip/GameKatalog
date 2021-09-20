@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import Network
 
 class ViewController: UIViewController {
 
     var apiService = ApiService()
     private var viewModel = GameViewModel()
+    
+    let monitor = NWPathMonitor()
+    let queue = DispatchQueue(label: "InternetConnectionMonitor")
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -26,16 +30,49 @@ class ViewController: UIViewController {
         
         gameTableView.separatorStyle = .none
         
-        if viewModel.isLoading {
-            spinner.stopAnimating()
-            spinner.hidesWhenStopped = true
-        }else {
-            spinner.startAnimating()
-            spinner.hidesWhenStopped = false
+        monitor.pathUpdateHandler = { pathUpdateHandler in
+            if pathUpdateHandler.status == .satisfied {
+                
+                DispatchQueue.main.async {
+                    self.retrieveData()
+                }
+                
+
+            } else {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Alert", message: "There's no Internet Connection", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Reload", style: UIAlertAction.Style.default, handler: { action in
+                        self.monitor.start(queue: self.queue)
+                        
+                    }))
+                    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { action in
+                        self.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                    print("no koneksi")
+                }
+
+            }
+            
         }
         
+        monitor.start(queue: queue)
+        
+        if viewModel.isLoading {
+            self.spinner.stopAnimating()
+            self.spinner.hidesWhenStopped = true
+        }else {
+            self.spinner.startAnimating()
+            self.spinner.hidesWhenStopped = false
+        }
+        
+    }
+    
+    
+    func retrieveData(){
         viewModel.fetchGameData { [weak self] in
             DispatchQueue.main.async {
+                
                 self?.spinner.stopAnimating()
                 self?.spinner.hidesWhenStopped = true
                 self?.gameTableView.reloadData()
@@ -90,4 +127,3 @@ extension ViewController : UITableViewDataSource {
     
     
 }
-
