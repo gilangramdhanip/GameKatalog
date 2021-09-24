@@ -19,7 +19,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="R76-PE-fNh">
                                 <rect key="frame" x="0.0" y="88" width="390" height="722"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <searchBar key="tableHeaderView" contentMode="redraw" id="SYC-3G-1KS">
+                                <searchBar key="tableHeaderView" contentMode="redraw" text="" id="SYC-3G-1KS">
                                     <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <textInputTraits key="textInputTraits"/>
@@ -43,8 +43,8 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NYU-ao-nyP">
-                                                            <rect key="frame" x="128" y="8" width="28.666666666666657" height="21"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <rect key="frame" x="128" y="8" width="32" height="21"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -98,12 +98,20 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="TGj-il-1ew">
                                 <rect key="frame" x="176.66666666666666" y="403.66666666666669" width="37" height="37"/>
                             </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data is empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TAZ-zN-UnL">
+                                <rect key="frame" x="142.66666666666666" y="411.66666666666669" width="104.66666666666666" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="R76-PE-fNh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="2i3-AT-2UO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="R76-PE-fNh" secondAttribute="bottom" id="4AY-GN-FA6"/>
+                            <constraint firstItem="TAZ-zN-UnL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="613-Vy-ziN"/>
+                            <constraint firstItem="TAZ-zN-UnL" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="9bE-qv-9QN"/>
                             <constraint firstItem="R76-PE-fNh" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="JzX-JE-XkP"/>
                             <constraint firstItem="TGj-il-1ew" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Rly-IA-NpR"/>
                             <constraint firstItem="TGj-il-1ew" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ta1-oF-ehY"/>
@@ -118,6 +126,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="dataEmpty" destination="TAZ-zN-UnL" id="Ln1-k4-xL9"/>
                         <outlet property="gameTableView" destination="R76-PE-fNh" id="dTj-gh-epS"/>
                         <outlet property="searchBar" destination="SYC-3G-1KS" id="zG2-h5-Y3t"/>
                         <outlet property="spinner" destination="TGj-il-1ew" id="XYQ-Z8-8TM"/>
@@ -132,8 +141,8 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="h2X-C6-5eN" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ozy-Fb-Q5T">
-                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="ozy-Fb-Q5T">
+                        <rect key="frame" x="0.0" y="44" width="390" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

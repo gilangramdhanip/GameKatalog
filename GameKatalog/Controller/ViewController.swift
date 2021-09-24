@@ -10,6 +10,7 @@ import Network
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var dataEmpty: UILabel!
     var apiService = ApiService()
     private var viewModel = GameViewModel()
     
@@ -23,20 +24,48 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
         gameTableView.delegate = self
         gameTableView.dataSource = self
-        
+        searchBar.delegate = self
         gameTableView.separatorStyle = .none
         
+        monitorConnection()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    
+    private func retrieveData(query : String ){
+        viewModel.fetchGameData(query:query) { data in
+            DispatchQueue.main.async {
+                self.spinner.stopAnimating()
+                self.spinner.hidesWhenStopped = true
+                self.gameTableView.reloadData()
+            }
+        }
+    }
+    
+    private func loadBar(){
+        if viewModel.isLoading {
+            self.spinner.stopAnimating()
+            self.spinner.hidesWhenStopped = true
+        }else {
+            self.spinner.startAnimating()
+            self.spinner.hidesWhenStopped = false
+        }
+    }
+    
+    
+    func monitorConnection(){
         monitor.pathUpdateHandler = { pathUpdateHandler in
             if pathUpdateHandler.status == .satisfied {
                 
                 DispatchQueue.main.async {
-                    self.retrieveData()
+                    self.retrieveData(query: "")
                 }
-                
 
             } else {
                 DispatchQueue.main.async {
@@ -56,28 +85,9 @@ class ViewController: UIViewController {
             
         }
         
+        loadBar()
+        
         monitor.start(queue: queue)
-        
-        if viewModel.isLoading {
-            self.spinner.stopAnimating()
-            self.spinner.hidesWhenStopped = true
-        }else {
-            self.spinner.startAnimating()
-            self.spinner.hidesWhenStopped = false
-        }
-        
-    }
-    
-    
-    func retrieveData(){
-        viewModel.fetchGameData { [weak self] in
-            DispatchQueue.main.async {
-                
-                self?.spinner.stopAnimating()
-                self?.spinner.hidesWhenStopped = true
-                self?.gameTableView.reloadData()
-            }
-        }
     }
 
 
@@ -106,9 +116,41 @@ extension ViewController : UITableViewDelegate {
     }
 }
 
-extension ViewController : UITableViewDataSource {
+extension ViewController : UITableViewDataSource, UISearchBarDelegate{
+
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        
+        if searchBar.text != nil {
+            DispatchQueue.main.async {
+                self.loadBar()
+                self.retrieveData(query: searchBar.text!)
+            }
+        }
+            
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchBar.text == nil || searchBar.text == "" {
+            searchBar.perform(#selector(self.resignFirstResponder), with: nil, afterDelay: 0.1)
+            DispatchQueue.main.async {
+            self.loadBar()
+            self.retrieveData(query:"")
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfRowsInSection(section: section)
+        
+        if (viewModel.numberOfRowsInSection(section: section) != 0){
+            self.dataEmpty.isHidden = true
+            return viewModel.numberOfRowsInSection(section: section)
+        }else{
+            self.dataEmpty.isHidden = false
+            return viewModel.numberOfRowsInSection(section: section)
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SDWebImage
 class GameTableViewCell: UITableViewCell {
     
     @IBOutlet weak var uiViewItem: UIView!
@@ -18,70 +18,35 @@ class GameTableViewCell: UITableViewCell {
     
     func setCellWithValuesOf(_ game: Game){
         uiViewItem.layer.cornerRadius = 5
-        updateUI(title: game.name, desc: game.released, gameImage: game.background_image, genre: game.genres)
+        updateUI(title: game.name, date: game.released, gameImage: game.background_image, genre: game.genres)
     }
 
-    private func updateUI(title: String?, desc: String?, gameImage : String?, genre : [Genre]) {
+    private func updateUI(title: String?, date: String?, gameImage : String?, genre : [Genre]) {
         
-        self.releaseGame.text = desc
-        self.gameTitle.text = title
         
-        guard let imageString = gameImage else {return}
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "MMM dd, yyyy"
+
+        let date = dateFormatterGet.date(from: date!)
         
-        guard let postImageUrl = URL(string: imageString) else {
-            self.gameImage.image = UIImage(named: "")
-            return
-        }
-        
+        self.releaseGame.text = "\(dateFormatterPrint.string(from: date ?? Date()))"
         self.gameImage.layer.cornerRadius = 5
+        self.gameTitle.text = title
+
+        let imageURL : NSURL? = NSURL(string: "\(gameImage ?? "")")
         
-        self.gameImage.image = nil
-        
-        getImageDataFrom(url: postImageUrl)
+        if let url = imageURL {
+            self.gameImage.sd_setImage(with: URL(string: "\(url)"))
+        }
         
         let selectedTeamMemberID = genre.map{$0.name}
         let output = selectedTeamMemberID.joined(separator: ", ")
         
             self.genreGame.text = "\(output)"
-        
-
-        
-    }
-    
-    
-    private func getImageDataFrom(url : URL){
-        URLSession.shared.dataTask(with: url) { (data,response, error) in
-            
-            if let error = error {
-                print("Data Task Error : \(error.localizedDescription)")
-                return
-            }
-            
-            guard let data = data else {
-                
-                print("Empty Data")
-                
-                return
-            }
-            
-            DispatchQueue.main.async {
-                if let image = UIImage(data: data) {
-                    self.gameImage.image = image
-                }
-            }
-            
-        }.resume()
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+ 
     }
 
 }

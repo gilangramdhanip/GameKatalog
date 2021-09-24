@@ -29,6 +29,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jw4-Hg-xL0">
+                                <rect key="frame" x="20" y="304" width="374" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -36,11 +42,15 @@
                             <constraint firstItem="g1L-5V-tS3" firstAttribute="centerX" secondItem="Egk-Ev-jvp" secondAttribute="centerX" id="3zA-tp-cdK"/>
                             <constraint firstItem="Egk-Ev-jvp" firstAttribute="top" secondItem="g1L-5V-tS3" secondAttribute="bottom" constant="23" id="D83-0U-OJZ"/>
                             <constraint firstItem="g1L-5V-tS3" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="14" id="KgJ-BD-CZD"/>
+                            <constraint firstItem="Jw4-Hg-xL0" firstAttribute="top" secondItem="Egk-Ev-jvp" secondAttribute="bottom" constant="8" symbolic="YES" id="cLq-Qw-v2j"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Jw4-Hg-xL0" secondAttribute="trailing" constant="20" id="dp8-Wh-KjN"/>
                             <constraint firstItem="g1L-5V-tS3" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="hZ5-e8-5KO"/>
+                            <constraint firstItem="Jw4-Hg-xL0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="uX7-3Q-Maf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="jbh-bF-ZwT"/>
                     <connections>
+                        <outlet property="descLabel" destination="Jw4-Hg-xL0" id="4eS-dW-n2R"/>
                         <outlet property="imageView" destination="g1L-5V-tS3" id="Zqv-fD-nmL"/>
                         <outlet property="name" destination="Egk-Ev-jvp" id="JUu-5f-hvr"/>
                     </connections>

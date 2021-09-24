@@ -14,21 +14,20 @@ class GameViewModel {
     var isLoading : Bool = false
     private var filtered : [String]!
     
-    func fetchGameData(completion : @escaping () -> ()) {
+    func fetchGameData(query : String, completion : @escaping (GameData) -> ()) {
         
-        apiService.getData { [ weak self] (result) in
+        apiService.getData(query : query) { [ weak self] (result) in
             
             switch result {
             case .success(let listOf):
                 self?.isLoading = false
                 self?.game = listOf.game
-                completion()
+                completion(listOf)
             
             case.failure(let error):
                 self?.isLoading = true
                 print("Error processing json data: \(error)")
             }
-            
         }
     }
     

@@ -11,14 +11,11 @@ class GameDetailViewModel {
     private var apiService = ApiService()
     private var game : GameDetailData?
     var isLoading : Bool = false
-    private var filtered : [String]!
     
     func fetchDetailGameData(id : Int, completion : @escaping (GameDetailData) -> ()) {
                 
         apiService.getDetailData(id: id){ [ weak self] (result) in
-            
-            print(result)
-            
+
             switch result {
             
             case .success(let listOf):

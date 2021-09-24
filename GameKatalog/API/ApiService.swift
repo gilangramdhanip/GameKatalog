@@ -10,11 +10,12 @@ import Foundation
 class ApiService {
     private var dataTask : URLSessionDataTask?
     
-    func getData(completion : @escaping (Result<GameData, Error>) -> Void){
+    func getData(query : String, completion : @escaping (Result<GameData, Error>) -> Void){
         
-        let dataGameUrl = "https://api.rawg.io/api/games?key=1104fbec0dbd4792b46f31695e71aa02"
+        let dataGameUrl = "https://api.rawg.io/api/games?key=1104fbec0dbd4792b46f31695e71aa02&search=\(query)"
+        let newUrl = dataGameUrl.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
         
-        guard let url = URL(string: dataGameUrl) else {return }
+        guard let url = URL(string: newUrl!) else {return }
         
         dataTask = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
@@ -88,7 +89,6 @@ class ApiService {
             do {
                 let decode = JSONDecoder()
                 let jsonData = try decode.decode(GameDetailData.self, from: data)
-                print(jsonData)
                 
                 DispatchQueue.main.async {
                     completion(.success(jsonData))

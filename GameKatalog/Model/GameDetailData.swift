@@ -17,14 +17,14 @@ struct GameDetail: Decodable {
 struct GameDetailData : Decodable {
     let id : Int
     let name_original : String?
-    let description : String?
+    let description_raw : String?
     let rating : Double?
     let background_image : String?
     let genres : [Genre]
     let parent_platforms : [ParentPlatforms]
     
     private enum CodingKeys: String, CodingKey {
-        case id, name_original, description, rating, background_image, genres
+        case id, name_original, description_raw, rating, background_image, genres
         case parent_platforms
     }
 }
