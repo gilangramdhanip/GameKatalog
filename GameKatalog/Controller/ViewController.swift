@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var dataEmpty: UILabel!
     var apiService = ApiService()
     private var viewModel = GameViewModel()
-    
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "InternetConnectionMonitor")
     

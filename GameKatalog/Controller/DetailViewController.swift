@@ -19,10 +19,15 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var labelPlatform: UILabel!
     @IBOutlet weak var viewTitle: UIView!
+    @IBOutlet weak var favButton: UIBarButtonItem!
     
     @IBOutlet weak var viewBox: UIView!
     @IBOutlet weak var genreLabel: UILabel!
     var gameData : Game?
+    
+    var favPressed : Bool?
+    
+    var favData : [GameInfo] = []
     
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "InternetConnectionMonitor")
@@ -36,15 +41,19 @@ class DetailViewController: UIViewController {
         viewBox.backgroundColor = UIColor.red
         viewBox.layer.cornerRadius = 5
         
+        showData()
+        
         monitorConnection()
     }
     
     func loadBar(){
         
         if viewModel.isLoading {
+            favButton.isEnabled = true
             spinner.stopAnimating()
             spinner.hidesWhenStopped = true
         }else {
+            favButton.isEnabled = false
             spinner.startAnimating()
             spinner.hidesWhenStopped = false
         }
@@ -82,11 +91,27 @@ class DetailViewController: UIViewController {
     
     
     func showData(){
+        
+        favData = Persistance.shared.fetchGame()
+        
+        for item in favData {
+            
+            if item.name_original == gameData?.name {
+                if item.isFavorite == false {
+                    favPressed = true
+                    favButton.image = UIImage(systemName: "heart")
+                }else{
+                    favPressed = false
+                    favButton.image = UIImage(systemName: "heart.fill")
+                }
+            }
+        }
+        
+        
         viewModel.fetchDetailGameData(id: gameData!.id) { data in
+            self.favButton.isEnabled = true
             self.spinner.stopAnimating()
             self.spinner.hidesWhenStopped = true
-            
-            
             self.titleGame.text = data.name_original
             self.dateGame.text = "\(data.rating ?? 0.0)"
             let selectedTeamMemberID = self.gameData?.genres.map{$0.name}
@@ -113,5 +138,25 @@ class DetailViewController: UIViewController {
         }
     }
     
+    @IBAction func favButtonPressed(_ sender: Any) {
+        if favPressed == false {
+            favPressed = true
+            favButton.image = UIImage(systemName: "heart")
+            
+            for item in favData {
+                
+                if item.name_original == gameData?.name {
+                    Persistance.shared.deleteCategory(game: item)
+                }
+            }
 
+        }else{
+            favPressed = false
+            favButton.image = UIImage(systemName: "heart.fill")
+            print("di favorite")
+            Persistance.shared.insertGame(nama: (gameData?.name)!, description: self.descriptionGame.text, background_image: (gameData?.background_image)!, rating: (gameData?.rating)!, released: (gameData?.released)!, genre: genreLabel.text!, isFavorite: true, platform: labelPlatform.text!)
+        }
+        
+    }
+    
 }
