@@ -116,13 +116,28 @@ class DetailViewController: UIViewController {
             for item in favData {
                 if item.name_original == gameData?.name {
                     Persistance.shared.deleteCategory(game: item)
+                    showToast(controller: self, message: "Removed favorite game", seconds: 1.0, navigationController : navigationController!)
                 }
             }
         } else {
             favPressed = false
             favButton.image = UIImage(systemName: "heart.fill")
-            print("di favorite")
+            showToast(controller: self, message: "Added favorite game", seconds: 1.0, navigationController : navigationController!)
             Persistance.shared.insertGame(nama: (gameData?.name)!, description: descriptionData!, background_image: (gameData?.background_image)!, rating: (gameData?.rating)!, released: (gameData?.released)!, genre: genreLabel.text!, isFavorite: true, platform: labelPlatform.text!)
+        }
+    }
+    
+    func showToast(controller: UIViewController, message : String, seconds: Double, navigationController : UINavigationController) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.view.backgroundColor = UIColor.black
+        alert.view.alpha = 0.6
+        alert.view.layer.cornerRadius = 15
+
+        controller.present(alert, animated: true)
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+            navigationController.popViewController(animated: true)
         }
     }
 }

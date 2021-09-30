@@ -335,6 +335,8 @@
                         <outlet property="platformFav" destination="Pe2-uE-nRq" id="PRL-72-czD"/>
                         <outlet property="rateFav" destination="2rc-SK-DuC" id="PMH-Pk-35a"/>
                         <outlet property="titleGameFav" destination="cBG-X2-sr0" id="9kk-gf-f4B"/>
+                        <outlet property="viewRate" destination="aVc-Uk-tdK" id="42m-Ud-N0Y"/>
+                        <outlet property="viewTitle" destination="lYJ-fn-7iz" id="cB8-9g-iqY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NTw-yO-B3K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
