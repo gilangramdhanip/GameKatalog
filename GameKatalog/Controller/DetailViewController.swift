@@ -10,7 +10,6 @@ import SDWebImage
 import Network
 
 class DetailViewController: UIViewController {
-    
     @IBOutlet weak var descriptionGame: UITextView!
     @IBOutlet weak var titleGame: UILabel!
     @IBOutlet weak var dateGame: UILabel!
@@ -20,59 +19,45 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var labelPlatform: UILabel!
     @IBOutlet weak var viewTitle: UIView!
     @IBOutlet weak var favButton: UIBarButtonItem!
-    
     @IBOutlet weak var viewBox: UIView!
     @IBOutlet weak var genreLabel: UILabel!
-    var gameData : Game?
-    
-    var favPressed : Bool?
-    
-    var favData : [GameInfo] = []
-    
+    var gameData: Game?
+    var descriptionData: String?
+    var favPressed: Bool?
+    var favData: [GameInfo] = []
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "InternetConnectionMonitor")
     private var viewModel = GameDetailViewModel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         viewTitle.layer.cornerRadius = 5
-
         viewBox.backgroundColor = UIColor.red
         viewBox.layer.cornerRadius = 5
-        
         showData()
-        
         monitorConnection()
     }
-    
-    func loadBar(){
-        
+    func loadBar() {
         if viewModel.isLoading {
             favButton.isEnabled = true
             spinner.stopAnimating()
             spinner.hidesWhenStopped = true
-        }else {
+        } else {
             favButton.isEnabled = false
             spinner.startAnimating()
             spinner.hidesWhenStopped = false
         }
     }
-    
-    func monitorConnection(){
+    func monitorConnection() {
         monitor.pathUpdateHandler = { pathUpdateHandler in
             if pathUpdateHandler.status == .satisfied {
-                
                 DispatchQueue.main.async {
                     self.showData()
                 }
-
             } else {
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "Alert", message: "There's no Internet Connection", preferredStyle: UIAlertController.Style.alert)
                     alert.addAction(UIAlertAction(title: "Reload", style: UIAlertAction.Style.default, handler: { action in
                         self.monitor.start(queue: self.queue)
-                        
                     }))
                     alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { action in
                         self.dismiss(animated: true, completion: nil)
@@ -80,83 +65,64 @@ class DetailViewController: UIViewController {
                     self.present(alert, animated: true, completion: nil)
                     print("no koneksi")
                 }
-
             }
-            
         }
-        
         loadBar()
         monitor.start(queue: queue)
     }
-    
-    
-    func showData(){
-        
+    func showData() {
         favData = Persistance.shared.fetchGame()
-        
         for item in favData {
-            
             if item.name_original == gameData?.name {
                 if item.isFavorite == false {
                     favPressed = true
                     favButton.image = UIImage(systemName: "heart")
-                }else{
+                } else {
                     favPressed = false
                     favButton.image = UIImage(systemName: "heart.fill")
                 }
             }
         }
-        
-        
-        viewModel.fetchDetailGameData(id: gameData!.id) { data in
+        viewModel.fetchDetailGameData(idGame: gameData!.id) { data in
             self.favButton.isEnabled = true
             self.spinner.stopAnimating()
             self.spinner.hidesWhenStopped = true
             self.titleGame.text = data.name_original
             self.dateGame.text = "\(data.rating ?? 0.0)"
-            let selectedTeamMemberID = self.gameData?.genres.map{$0.name}
+            let selectedTeamMemberID = self.gameData?.genres.map {$0.name}
             let output = selectedTeamMemberID!.joined(separator: ", ")
             
             self.genreLabel.text = "\(output)"
-            
-            let imageURL : NSURL? = NSURL(string: "\(data.background_image ?? "")")
-            
+            let imageURL: NSURL? = NSURL(string: "\(data.background_image ?? "")")
             if let url = imageURL {
                 self.imageGame.sd_setImage(with: URL(string: "\(url)"))
             }
-            
-            let platform = data.parent_platforms.map{$0.platform?.name}
+            let platform = data.parent_platforms.map {$0.platform?.name}
             var array2a = [String]()
             for item in platform {
                 array2a.append(item!)
             }
             let platformOutput = array2a.joined(separator: ", ")
-
             self.labelPlatform.text = platformOutput
             self.descriptionGame.text = data.description_raw
-
+            
+            self.descriptionData = data.description_raw
         }
     }
-    
     @IBAction func favButtonPressed(_ sender: Any) {
         if favPressed == false {
             favPressed = true
             favButton.image = UIImage(systemName: "heart")
-            
             for item in favData {
-                
                 if item.name_original == gameData?.name {
                     Persistance.shared.deleteCategory(game: item)
                 }
             }
-
-        }else{
+        } else {
             favPressed = false
             favButton.image = UIImage(systemName: "heart.fill")
             print("di favorite")
-            Persistance.shared.insertGame(nama: (gameData?.name)!, description: self.descriptionGame.text, background_image: (gameData?.background_image)!, rating: (gameData?.rating)!, released: (gameData?.released)!, genre: genreLabel.text!, isFavorite: true, platform: labelPlatform.text!)
+            Persistance.shared.insertGame(nama: (gameData?.name)!, description: descriptionData!, background_image: (gameData?.background_image)!, rating: (gameData?.rating)!, released: (gameData?.released)!, genre: genreLabel.text!, isFavorite: true, platform: labelPlatform.text!)
         }
-        
     }
-    
 }

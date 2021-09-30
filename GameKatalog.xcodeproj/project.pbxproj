@@ -201,6 +201,7 @@
 				C0F13C7726F6FC9600F55E66 /* Frameworks */,
 				C0F13C7826F6FC9600F55E66 /* Resources */,
 				538A1F9C81BFD5B5DE7EAE32 /* [CP] Embed Pods Frameworks */,
+				C0C3595127061C3D00501DB9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -297,6 +298,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GameKatalog/Pods-GameKatalog-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		C0C3595127061C3D00501DB9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

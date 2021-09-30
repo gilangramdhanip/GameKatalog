@@ -15,7 +15,6 @@ struct GameData: Decodable {
     }
 }
 
-
 struct Game : Decodable {
     let id : Int
     let name : String?
@@ -36,6 +35,5 @@ struct Genre : Decodable {
     private enum CodingKeys : String, CodingKey {
         case name
     }
-    
     
 }

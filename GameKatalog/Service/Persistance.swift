@@ -4,19 +4,16 @@
 //
 //  Created by Gilang Ramdhani Putra on 25/09/21.
 //
-
-import Foundation
 import CoreData
 
-
-class Persistance{
-
+class Persistance {
+    
     static let shared = Persistance()
-
+    
     lazy var persistentContainer: NSPersistentContainer = {
-
+        
         let container = NSPersistentContainer(name: "GameKatalog")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
@@ -24,32 +21,29 @@ class Persistance{
         return container
     }()
     
-    func insertGame(nama : String, description : String, background_image: String, rating : Double, released : String, genre : String, isFavorite : Bool, platform : String){
-        
-        do{
+    func insertGame(nama: String, description: String, background_image: String, rating: Double, released: String, genre: String, isFavorite: Bool, platform: String) {
+        do {
             let game = GameInfo(context: persistentContainer.viewContext)
             game.name_original = nama
             game.background_image = background_image
             game.rating = rating
             game.released = released
             game.genre = genre
+            game.description_raw = description
             game.parent_platforms = platform
             game.isFavorite = isFavorite
-
+            
             saveContext()
         }
-        catch{
-            print("Error fetching data")
-        }
-
+        
     }
     
-    func deleteCategory(game : GameInfo){
+    func deleteCategory(game : GameInfo) {
         persistentContainer.viewContext.delete(game)
         saveContext()
     }
     
-    func fetchGame() -> [GameInfo]{
+    func fetchGame() -> [GameInfo] {
         let  request : NSFetchRequest<GameInfo> = GameInfo.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "rating", ascending: true)]
         
@@ -57,8 +51,7 @@ class Persistance{
         
         do {
             user = try persistentContainer.viewContext.fetch(request)
-        }
-        catch{
+        } catch {
             print("Error fetching data")
         }
         
@@ -66,7 +59,7 @@ class Persistance{
     }
     
     // MARK: - Core Data Saving support
-
+    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {

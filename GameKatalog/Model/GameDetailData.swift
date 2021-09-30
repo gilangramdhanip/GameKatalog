@@ -5,8 +5,6 @@
 //  Created by Gilang Ramdhani Putra on 20/09/21.
 //
 
-import Foundation
-
 struct GameDetail: Decodable {
     let game : GameDetailData?
     
@@ -28,11 +26,9 @@ struct GameDetailData : Decodable {
         case parent_platforms
     }
 }
-
-
 struct ParentPlatforms : Decodable {
     let platform : Platform?
-
+    
 }
 
 struct Platform : Decodable {
